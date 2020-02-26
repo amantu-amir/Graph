@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+#define int long long int
+using namespace std;
+const int N = 1e5+50;
+
+vector<int> G[N];
+int vis[N];
+bool cycle;
+
+void dfs(int root){
+	vis[root] = 1;
+	for(auto child : G[root]){
+		if(vis[child] == 1){
+			cycle = true;
+			return;
+		}
+		if(vis[child] == 0){
+			dfs(child);
+		}
+	}
+	vis[root] = 2;
+}
+
+int32_t main(){
+	//ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+	//freopen("input.txt","r",stdin);
+	int tc=10;
+	for(int T=1; T<=tc; T++){
+		int node, edge;
+		cin>>node>>edge;
+		int u, v;
+		for(int i=1; i<=edge; i++){
+			cin>>u>>v;
+			G[u].push_back(v);
+		}
+		for(int i=1; i<=node; i++){
+			if(vis[i] == 0){
+				dfs(i);
+			}
+		}
+		if(cycle) cout<<"Cycle\n";
+		else cout<<"Not Cycle\n";
+	}
+	return 0;
+}
