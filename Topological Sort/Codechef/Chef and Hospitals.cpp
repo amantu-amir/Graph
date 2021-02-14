@@ -30,18 +30,15 @@ sort(all(v)); v.resize(distance(v.begin(),unique(all(v))));return v;}
 const int N=1e5;
 
 
-bool cycle;
-ll vis[N+5];
-ll finish[N+5];
-ll start[N+5];
-ll cost[N+5];
-ll somoy=1,W=INT_MAX;
-vector<ll>G[N+50];
+bool vis[N+5];
+vector<ll>scc;
+ll start[N+5],finish[N+5],somoy=1;
+vector<ll>adj[N+5],trans_adj[N+5];
 
 void dfs(ll root){
-	vis[root]=2;
+	vis[root]=1;
 	start[root]=somoy++;
-	for(auto child:G[root]){
+	for(auto child:adj[root]){
 		if(vis[child]==0){
 			dfs(child);
 		}
@@ -49,19 +46,14 @@ void dfs(ll root){
 	finish[root]=somoy++;
 }
 
-void find_cycle(ll root){
+void dfs_scc(ll root){
 	vis[root]=1;
-	W=min(W,cost[root]);
-	for(auto child:G[root]){
-		if(vis[child]==1){
-			cycle=true;
-			return;
-		}
+	scc.pb(root);
+	for(auto child:trans_adj[root]){
 		if(vis[child]==0){
-			find_cycle(child);
+			dfs_scc(child);
 		}
 	}
-	vis[root]=2;
 }
 
 int main(){
@@ -72,53 +64,82 @@ int main(){
 
 	ll t=1;
 	rep(T,1,t+1){
-		ll node,edge; 
+		ll node,edge;
 		cin>>node>>edge;
 		ll u,v;
-		rep(i,0,edge){
+		for(ll i=0; i<edge; i++){
 			cin>>u>>v;
-			G[u].pb(v);
+			adj[u].pb(v);
+			trans_adj[v].pb(u);
 		}
+		ll cost[node+5];
 		vector<ll>hospital;
-		rep(i,0,node){
+		for(ll i=0; i<node; i++){
 			cin>>cost[i];
 			if(cost[i]==0){
 				hospital.pb(i);
 			}
 		}
-		rep(i,0,node){
-			if(vis[i]==false){
+		for(auto i:hospital){
+			if(vis[i]==0){
+				dfs(i);
+			}
+		}
+		vector<ll>curr;
+		for(ll i=0; i<node; i++){
+			if(vis[i]==0){
+				curr.pb(i);
+			}
+		}
+		somoy=1;
+		for(auto i:curr){
+			if(vis[i]==0){
 				dfs(i);
 			}
 		}
 		vector<pair<ll,ll>>P;
-		rep(i,0,node){
+		for(auto i:curr){
 			P.pb({finish[i],i});
 		}
 		sort(all(P));
 		reverse(all(P));
-		memset(vis,0,sizeof(vis));
-		ll sz=hospital.size();
-		rep(i,0,sz){
-			dfs(hospital[i]);
+		for(auto i:curr){
+			vis[i]=0;
+		}
+		ll sz=P.size();
+		vector<ll>temp;
+		for(ll i=0; i<sz; i++){
+			temp.pb(P[i].S);
+			if(vis[P[i].S]==0){
+				scc.clear();
+				dfs_scc(P[i].S);
+				ll Min=cost[scc[0]];
+				for(auto j:scc){
+					Min=min(Min,cost[j]);
+				}
+				for(auto j:scc){
+					cost[j]=Min;
+				}
+			}
+		}
+		for(auto i:curr){
+			vis[i]=0;
 		}
 		ll res=0;
-		rep(i,0,node){
-			if(vis[P[i].S]==0){
-				cycle=false;
-				find_cycle(P[i].S);
-				if(cycle==true){
-					res+=W;
-				}
-				else{
-					res+=cost[P[i].S];
-				}
+		for(auto i:temp){
+			if(vis[i]==0){
+				res+=cost[i];
+				dfs(i);
 			}
 		}
 		cout<<res<<"\n";
 	}
 	return 0;
 }
+
+
+
+
 
 
 
