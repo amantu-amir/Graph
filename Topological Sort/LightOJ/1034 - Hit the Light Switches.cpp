@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+#define int long long int
+using namespace std;
+const int N = 1e4+50;
+
+vector<int> G[N];
+bool vis[N];
+int start[N],finish[N],somoy;
+
+void reset(){
+	somoy = 0;
+	for(int i=1; i<=N-5; i++){
+		G[i].clear(); vis[i] = false;
+	}
+}
+
+void dfs(int root){
+	vis[root] = true;
+	start[root] = somoy++;
+	for(auto child : G[root]){
+		if(vis[child] == false){
+			dfs(child);
+		}
+	}
+	finish[root] = somoy++;
+}
+
+int32_t main(){
+	//ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+    freopen("lightojIn.txt","r",stdin);
+    //freopen("lightojOut.txt","w",stdout);
+    int tc=1; cin>>tc;
+    for(int T=1; T<=tc; T++){
+    	reset();
+        int node, edge;
+        cin>>node>>edge;
+        int u, v;
+        for(int i=1; i<=edge; i++){
+        	cin>>u>>v;
+        	G[u].push_back(v);
+        }
+        for(int i=1; i<=node; i++){
+        	if(vis[i] == false){
+        		dfs(i);
+        	}
+        }
+        vector<pair<int,int>>order;
+        for(int i=1; i<=node; i++){
+        	order.push_back(make_pair(finish[i],i));
+        }
+        sort(order.begin(), order.end());
+        reverse(order.begin(), order.end());
+        int res = 0;
+        memset(vis, false, sizeof(vis));
+        for(int i=0; i<node; i++){
+        	int a = order[i].second;
+        	if(vis[a] == false){
+        		res++;
+        		dfs(a);
+        	}
+        }
+        cout<<"Case "<<T<<": "<<res<<"\n";
+    }
+    return 0;
+}
