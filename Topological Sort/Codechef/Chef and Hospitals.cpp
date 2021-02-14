@@ -30,21 +30,38 @@ sort(all(v)); v.resize(distance(v.begin(),unique(all(v))));return v;}
 const int N=1e5;
 
 
-vector<ll>G[N+50];
-bool vis[N+5];
+bool cycle;
+ll vis[N+5];
 ll finish[N+5];
 ll start[N+5];
-ll somoy=1;
+ll cost[N+5];
+ll somoy=1,W=INT_MAX;
+vector<ll>G[N+50];
 
 void dfs(ll root){
-	vis[root]=true;
+	vis[root]=2;
 	start[root]=somoy++;
 	for(auto child:G[root]){
-		if(vis[child]==false){
+		if(vis[child]==0){
 			dfs(child);
 		}
 	}
 	finish[root]=somoy++;
+}
+
+void find_cycle(ll root){
+	vis[root]=1;
+	W=min(W,cost[root]);
+	for(auto child:G[root]){
+		if(vis[child]==1){
+			cycle=true;
+			return;
+		}
+		if(vis[child]==0){
+			find_cycle(child);
+		}
+	}
+	vis[root]=2;
 }
 
 int main(){
@@ -62,7 +79,7 @@ int main(){
 			cin>>u>>v;
 			G[u].pb(v);
 		}
-		vector<ll>cost(node),hospital;
+		vector<ll>hospital;
 		rep(i,0,node){
 			cin>>cost[i];
 			if(cost[i]==0){
@@ -87,13 +104,21 @@ int main(){
 		}
 		ll res=0;
 		rep(i,0,node){
-			if(vis[P[i].S]==false){
-				res+=cost[P[i].S];
-				dfs(P[i].S);
+			if(vis[P[i].S]==0){
+				cycle=false;
+				find_cycle(P[i].S);
+				if(cycle==true){
+					res+=W;
+				}
+				else{
+					res+=cost[P[i].S];
+				}
 			}
 		}
 		cout<<res<<"\n";
 	}
 	return 0;
 }
+
+
 
