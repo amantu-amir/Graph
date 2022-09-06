@@ -86,6 +86,10 @@ int main(){
 		ll root, goal;
 		cin>>root>>goal;
 		ll res=bfs(toString(root), toString(goal));
+		if(res==-1){ 
+			cout<<"Impossible\n";
+			continue;
+		}
 		cout<<res<<"\n";
 	}
 	return 0;
