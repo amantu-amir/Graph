@@ -39,7 +39,8 @@ void dijkstra(ll root){
 	for(ll i=0; i<(N-5); i++){
 		dist[i]=inf;
 	}dist[root]=0;
-	priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, cmp>PQ;
+	//priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, cmp>PQ;
+	priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>>PQ;
 	PQ.push({0,root});
 	while(!PQ.empty()){
 		ll u=PQ.top().S;
