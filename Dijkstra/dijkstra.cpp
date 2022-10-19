@@ -25,13 +25,21 @@ const ll p=29;
 const ll N=2e6+50;
 const ll mod=1e9+7;
 
+
+// struct cmp {
+// 	bool operator() (const pair<ll, ll> & a, const pair<ll, ll> & b) {
+// 	    if(a.second == b.second) return a.first < b.first;
+// 	    return a.second > b.second;
+// 	}
+// };
+
 ll dist[N];
 vector<pair<ll,ll>>adj[N];
 void dijkstra(ll root){
 	for(ll i=0; i<(N-5); i++){
 		dist[i]=inf;
 	}dist[root]=0;
-	priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>>PQ;
+	priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, cmp>PQ;
 	PQ.push({0,root});
 	while(!PQ.empty()){
 		ll u=PQ.top().S;
