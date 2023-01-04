@@ -119,3 +119,62 @@ int32_t main(){
 }
 
 //--------------------******Alhamdulillah******-------------------//
+
+
+
+
+
+
+
+
+
+
+
+// #include<iostream>
+// using namespace std;
+
+// int adj[100][100], vis[100], Q[100], level[100];
+
+// void bfs(int root) {
+//     vis[root] = 1;
+//     int L = 100, R = 100;
+//     Q[L--] = root;
+//     level[root] = 1;
+//     while (L <= R) {
+//         int u = Q[R--];
+//         for (int i = 1; i <= 100; i++) {
+//             if (adj[u][i] and !vis[i]) {
+//                 Q[L--] = i;
+//                 vis[i] = 1;
+//                 level[i] = level[u] + 1;
+//             }
+//         }
+//     }
+// }
+
+// int main() {
+//     int node;
+//     cin >> node;
+//     int u, v;
+//     for (int i = 1; i <= (node - 1); i++) {
+//         cin >> u >> v;
+//         adj[u][v] = 1;
+//         adj[v][u] = 1;
+//     }
+//     bfs(1);
+//     int x;
+//     cin >> x;
+//     int cnt = 0;
+//     for (int i = 1; i <= node; i++) {
+//         if (level[i] == x) cnt++;
+//     }
+//     cout << cnt << "\n";
+//     return 0;
+// }
+
+
+
+
+
+
+
